@@ -2,4 +2,14 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="bgLight">#F9F9FA</color>
+    
+    <color name="startOrange">#FC683A</color>
+    <color name="centerOrange">#F05A2A</color>
+    <color name="endOrange">#F1BAA8</color>
+    
+    <color name="textDarkOrange">#91361A</color>
+    <color name="textMedOrange">#F05A2A</color>
+    <color name="textLightOrange">#F89576</color>
 </resources>

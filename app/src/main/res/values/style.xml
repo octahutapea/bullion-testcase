@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="customTextField" parent="Widget.Material3.TextInputLayout.OutlinedBox" >
+        <item name="android:background">@drawable/rounded_text_field</item>
+        <item name="android:layout_marginBottom">16dp</item>
+    </style>
+    <style name="customButton">
+        <item name="android:padding">16dp</item>
+        <item name="android:backgroundTint">#255E92</item>
+    </style>
+</resources>
