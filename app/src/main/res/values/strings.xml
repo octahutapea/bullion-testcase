@@ -23,4 +23,12 @@
     <string name="make_sure_the_password_matches">Make sure the password matches</string>
     <string name="add_users">Add Users</string>
     <string name="logout">Logout</string>
+    <string name="gender">Gender</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="address">Address</string>
+    <string name="edit_user">Edit User</string>
+    <string name="update_user">Update User</string>
 </resources>

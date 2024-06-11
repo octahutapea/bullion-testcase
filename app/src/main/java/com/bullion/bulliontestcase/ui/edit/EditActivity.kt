@@ -1,45 +1,43 @@
-package com.bullion.bulliontestcase.ui.register
+package com.bullion.bulliontestcase.ui.edit
 
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.CheckBox
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.bullion.bulliontestcase.R
+import com.bullion.bulliontestcase.data.remote.request.EditRequestBody
 import com.bullion.bulliontestcase.data.remote.response.UserItem
+import com.bullion.bulliontestcase.databinding.ActivityEditBinding
 import com.bullion.bulliontestcase.databinding.ActivityRegisterBinding
 import com.bullion.bulliontestcase.helper.PasswordEncryption
 import com.bullion.bulliontestcase.ui.login.LoginActivity
+import com.bullion.bulliontestcase.ui.main.MainActivity
+import com.bullion.bulliontestcase.ui.register.RegisterViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class RegisterActivity : AppCompatActivity() {
+class EditActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityRegisterBinding
-    private val viewModel: RegisterViewModel by viewModel()
+    private lateinit var binding: ActivityEditBinding
+    private val viewModel: EditViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        binding = ActivityRegisterBinding.inflate(layoutInflater)
+        binding = ActivityEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.register) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.edit) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
@@ -50,6 +48,36 @@ class RegisterActivity : AppCompatActivity() {
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
+        }
+
+        val userData = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra("userItem", UserItem::class.java)
+        } else {
+            intent.getParcelableExtra<UserItem>("userItem")
+        }
+
+        val idUser = userData?.id
+
+        if (userData != null) {
+            val name = splitFullName(userData.name)
+            binding.etFirstName.setText(name.first)
+            binding.etLastName.setText(name.second)
+            when (userData.gender) {
+                "male" -> {
+                    binding.cbMale.isChecked = true
+                }
+                "female" -> {
+                    binding.cbFemale.isChecked = true
+                }
+                else -> {
+                    binding.cbMale.isChecked = true
+                    binding.cbFemale.isChecked = true
+                }
+            }
+            binding.etDateOfBirth.setText(userData.dateOfBirth)
+            binding.etEmail.setText(userData.email)
+            binding.etPhoneNumber.setText(userData.phone)
+            binding.etAddress.setText(userData.address)
         }
 
         binding.etDateOfBirth.setOnClickListener {
@@ -69,11 +97,7 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
 
-        binding.etPhotoProfile.setOnClickListener {
-            startGallery()
-        }
-
-        binding.btnAddNewUsers.setOnClickListener {
+        binding.btnUpdateUser.setOnClickListener {
             val firstName = binding.etFirstName.text.toString()
             val lastName = binding.etLastName.text.toString()
             val genderMale = binding.cbMale
@@ -82,11 +106,8 @@ class RegisterActivity : AppCompatActivity() {
             val email = binding.etEmail.text.toString()
             val phoneNumber = binding.etPhoneNumber.text.toString()
             val address = binding.etAddress.text.toString()
-            val photoProfile = binding.etPhotoProfile.text.toString()
-            val password = binding.etPassword.text.toString()
-            val confirmPassword = binding.etConfirmPassword.text.toString()
 
-            val success = validateFields(firstName, lastName, genderMale, genderFemale, dateOfBirth, email, phoneNumber, address, photoProfile, password, confirmPassword)
+            val success = validateFields(firstName, lastName, genderMale, genderFemale, dateOfBirth, email, phoneNumber, address)
 
             val gender: String = when {
                 genderMale.isChecked -> "male"
@@ -94,59 +115,28 @@ class RegisterActivity : AppCompatActivity() {
                 else -> "male/female"
             }
 
-            val encryptedPassword = PasswordEncryption.encryptPassword(password)
-
             if (success) {
-
-                viewModel.postRegister(firstName, lastName, gender, dateOfBirth, email, phoneNumber, address, photoProfile.toUri(), encryptedPassword, applicationContext) { isRegister ->
-                    if (isRegister) {
-                        Toast.makeText(applicationContext, "Register success", Toast.LENGTH_LONG).show()
-                        goToLogin()
+                val editRequestBody = EditRequestBody(firstName, lastName, gender, dateOfBirth, email, phoneNumber, address)
+                if (idUser != null) {
+                    viewModel.postEdit(idUser, editRequestBody) { isEdited ->
+                        if (isEdited) {
+                            Toast.makeText(applicationContext, "Register success", Toast.LENGTH_LONG).show()
+                            goToMain()
+                        }
                     }
                 }
             }
         }
     }
 
-    private fun startGallery() {
-        launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-    }
-
-    private val launcherGallery = registerForActivityResult(
-        ActivityResultContracts.PickVisualMedia()
-    ) { uri: Uri? ->
-        val mimeType = contentResolver.getType(uri!!)
-
-        if (mimeType == "image/jpeg" || mimeType == "image/jpg") {
-            val fileSizeInMB = getFileSizeFromUri(uri) / (1024 * 1024)
-            val maxSizeInMB = 5
-
-            if (fileSizeInMB <= maxSizeInMB) {
-                binding.etPhotoProfile.setText(uri.toString())
-            } else {
-                Toast.makeText(applicationContext, "Ukuran file terlalu besar. Maksimal 5 MB.", Toast.LENGTH_LONG).show()
-            }
-        } else {
-            Toast.makeText(applicationContext, "Format file harus JPEG.", Toast.LENGTH_LONG).show()
+    fun splitFullName(fullName: String): Pair<String, String> {
+        val parts = fullName.split(" ")
+        if (parts.size == 1) {
+            return Pair(parts[0], "")
         }
-    }
-
-    private fun getFileSizeFromUri(uri: Uri): Long {
-        return try {
-            val inputStream: InputStream? = contentResolver.openInputStream(uri)
-            val fileSize = inputStream?.available()?.toLong() ?: -1
-            inputStream?.close()
-            fileSize
-        } catch (e: Exception) {
-            e.printStackTrace()
-            -1
-        }
-    }
-
-    private fun goToLogin() {
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
-        finish()
+        val firstName = parts.subList(0, parts.size - 1).joinToString(" ")
+        val lastName = parts.last()
+        return Pair(firstName, lastName)
     }
 
     private fun validateFields(
@@ -158,11 +148,7 @@ class RegisterActivity : AppCompatActivity() {
         email: String,
         phoneNumber: String,
         address: String,
-        photoProfile: String,
-        password: String,
-        confirmPassword: String
     ): Boolean {
-        val passwordPattern = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).{8,}$"
 
         if (firstName.isBlank()) {
             binding.layoutFirstName.helperText = "First name is required"
@@ -196,29 +182,14 @@ class RegisterActivity : AppCompatActivity() {
             binding.layoutAddress.helperText = "Address is required"
             return false
         }
-        else if (photoProfile.isBlank()) {
-            binding.layoutPhotoProfile.helperText = "Photo profile is required"
-            return false
-        }
-        else if (password.isBlank()) {
-            binding.layoutPassword.helperText = "Password is required"
-            return false
-        }
-        else if (!password.matches(passwordPattern.toRegex())) {
-            binding.layoutPassword.helperText = "Password must be at least 8 characters, have alphabet, number, and capital letter"
-            return false
-        }
-        else if (confirmPassword.isBlank()) {
-            binding.layoutConfirmPassword.helperText = "Password is required"
-            return false
-        }
-        else if (confirmPassword != password) {
-            binding.layoutConfirmPassword.helperText = "Password is different"
-            return false
-        }
         else {
             return true
         }
     }
 
+    private fun goToMain() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
 }

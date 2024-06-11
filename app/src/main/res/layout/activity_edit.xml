@@ -2,11 +2,11 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/register"
+    android:id="@+id/edit"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_background"
-    tools:context=".ui.register.RegisterActivity">
+    tools:context=".ui.edit.EditActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -189,91 +189,12 @@
                     style="@style/customTextField"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="4dp"
-                android:text="@string/photo_profile" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layout_photo_profile"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="16dp"
-                app:endIconMode="custom"
-                app:endIconDrawable="@drawable/ic_link_24">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_photo_profile"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:inputType="none"
-                    style="@style/customTextField"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="4dp"
-                android:text="@string/password" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="4dp"
-                android:text="@string/password_desc" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layout_password"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="16dp"
-                app:endIconMode="password_toggle"
-                app:endIconTint="@color/blue">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    style="@style/customTextField"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="4dp"
-                android:text="@string/confirm_password" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="4dp"
-                android:text="@string/make_sure_the_password_matches" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layout_confirm_password"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="16dp"
-                app:endIconMode="password_toggle"
-                app:endIconTint="@color/blue">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_confirm_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    style="@style/customTextField"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
             <Button
-                android:id="@+id/btn_add_new_users"
+                android:id="@+id/btn_update_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/customButton"
-                android:text="@string/add_users" />
+                android:text="@string/update_user" />
 
         </LinearLayout>
 

@@ -32,6 +32,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/logout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -58,6 +59,7 @@
             android:background="@drawable/rounded_background" >
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_users"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

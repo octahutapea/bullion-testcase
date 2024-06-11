@@ -12,4 +12,6 @@
     <color name="textDarkOrange">#91361A</color>
     <color name="textMedOrange">#F05A2A</color>
     <color name="textLightOrange">#F89576</color>
+
+    <color name="blue">#255E92</color>
 </resources>
