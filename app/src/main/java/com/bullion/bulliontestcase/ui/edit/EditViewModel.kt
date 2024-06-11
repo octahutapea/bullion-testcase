@@ -66,17 +66,17 @@ class EditViewModel(private val userPreferences: UserPreferences) : ViewModel(),
                     override fun onResponse(call: Call<EditResponse>, response: Response<EditResponse>) {
                         if (response.isSuccessful) {
                             callback(true)
-                            Log.e("Response Edit", response.body().toString())
+                            Log.e("Response Edit 1", response.body().toString())
                         }
                         else {
                             callback(false)
-                            Log.e("Response Edit", response.message())
+                            Log.e("Response Edit 2", response.toString())
                         }
                     }
 
                     override fun onFailure(call: Call<EditResponse>, response: Throwable) {
                         callback(false)
-                        Log.e("Response Edit", response.toString())
+                        Log.e("Response Edit 3", response.toString())
                     }
                 })
             } else {

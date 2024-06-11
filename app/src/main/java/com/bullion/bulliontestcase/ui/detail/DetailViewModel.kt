@@ -34,9 +34,10 @@ class DetailViewModel (private val userPreferences: UserPreferences) : ViewModel
                         if (response.isSuccessful) {
                             _detail.value = response.body()?.data
 
-                            Log.e("Response Detail 1", response.body().toString())
+                            Log.e("Response Detail 1", response.body()?.data?.name.toString())
+                            Log.e("Response Detail 1", response.body()?.data?.gender.toString())
                         } else {
-                            Log.e("Response Detail 2", response.message())
+                            Log.e("Response Detail 2", response.toString())
                         }
                     }
 

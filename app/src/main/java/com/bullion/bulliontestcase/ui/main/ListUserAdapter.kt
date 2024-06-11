@@ -1,10 +1,12 @@
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bullion.bulliontestcase.R
 import com.bullion.bulliontestcase.data.remote.response.UserItem
 import com.bullion.bulliontestcase.databinding.ItemRowUserBinding
 import com.bullion.bulliontestcase.ui.detail.DetailActivity
@@ -40,6 +42,7 @@ class ListUserAdapter(private val context: Context) : ListAdapter<UserItem, List
         holder.itemView.setOnClickListener {
             val intent = Intent(context, DetailActivity::class.java)
             intent.putExtra("userId", user.id)
+            intent.putExtra("userName", user.name)
             context.startActivity(intent)
         }
     }

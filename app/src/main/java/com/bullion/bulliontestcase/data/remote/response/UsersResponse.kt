@@ -1,8 +1,6 @@
 package com.bullion.bulliontestcase.data.remote.response
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
 
 data class UsersResponse(
 
@@ -19,7 +17,6 @@ data class UsersResponse(
 	val status: Int
 )
 
-@Parcelize
 data class UserItem(
 
 	@field:SerializedName("address")
@@ -45,4 +42,4 @@ data class UserItem(
 
 	@field:SerializedName("email")
 	val email: String
-): Parcelable
+)

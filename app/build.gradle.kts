@@ -1,8 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
-    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.ksp)
 }
 
 android {
@@ -60,7 +59,7 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
     implementation(libs.glide)
-    kapt(libs.glide.compiler)
+    ksp(libs.glide.ksp)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

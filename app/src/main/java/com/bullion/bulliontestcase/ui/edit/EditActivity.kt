@@ -3,6 +3,7 @@ package com.bullion.bulliontestcase.ui.edit
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.widget.CheckBox
 import android.widget.Toast
@@ -44,19 +45,24 @@ class EditActivity : AppCompatActivity() {
         }
 
         setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.apply {
+            title = ""
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_back_24)
+        }
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
         val userId = intent.getStringExtra("userId")
+        val userName = intent.getStringExtra("userName")
 
         viewModel.getDetail(userId.toString())
         viewModel.detail.observe(this) { userData ->
-            val name = splitFullName(userData.name)
-            binding.etFirstName.setText(name.first)
-            binding.etLastName.setText(name.second)
+            val name = userName?.let { splitFullName(it) }
+            binding.etFirstName.setText(name?.first)
+            binding.etLastName.setText(name?.second)
             when (userData.gender) {
                 "male" -> {
                     binding.cbMale.isChecked = true

@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.bullion.bulliontestcase.R
 import com.bullion.bulliontestcase.data.remote.response.UserItem
 import com.bullion.bulliontestcase.databinding.ActivityRegisterBinding
 import com.bullion.bulliontestcase.helper.PasswordEncryption
@@ -46,7 +47,11 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.apply {
+            title = ""
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_back_24)
+        }
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -101,7 +106,7 @@ class RegisterActivity : AppCompatActivity() {
                 viewModel.postRegister(firstName, lastName, gender, dateOfBirth, email, phoneNumber, address, photoProfile.toUri(), encryptedPassword, applicationContext) { isRegister ->
                     if (isRegister) {
                         Toast.makeText(applicationContext, "Register success", Toast.LENGTH_LONG).show()
-                        goToLogin()
+                        onBackPressedDispatcher.onBackPressed()
                     }
                 }
             }
@@ -141,12 +146,6 @@ class RegisterActivity : AppCompatActivity() {
             e.printStackTrace()
             -1
         }
-    }
-
-    private fun goToLogin() {
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
-        finish()
     }
 
     private fun validateFields(
