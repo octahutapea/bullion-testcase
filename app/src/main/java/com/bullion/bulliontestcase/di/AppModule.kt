@@ -3,6 +3,7 @@ package com.bullion.bulliontestcase.di
 import android.content.Context
 import com.bullion.bulliontestcase.data.local.UserPreferences
 import com.bullion.bulliontestcase.data.remote.retrofit.ApiService
+import com.bullion.bulliontestcase.ui.detail.DetailViewModel
 import com.bullion.bulliontestcase.ui.edit.EditViewModel
 import com.bullion.bulliontestcase.ui.login.LoginViewModel
 import com.bullion.bulliontestcase.ui.main.MainViewModel
@@ -19,6 +20,7 @@ val viewModelModule = module {
     viewModel { LoginViewModel(get()) }
     viewModel { RegisterViewModel() }
     viewModel { MainViewModel(get()) }
+    viewModel { DetailViewModel(get()) }
     viewModel { EditViewModel(get()) }
 }
 

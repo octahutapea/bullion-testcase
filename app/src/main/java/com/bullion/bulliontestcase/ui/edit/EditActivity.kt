@@ -50,15 +50,10 @@ class EditActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        val userData = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra("userItem", UserItem::class.java)
-        } else {
-            intent.getParcelableExtra<UserItem>("userItem")
-        }
+        val userId = intent.getStringExtra("userId")
 
-        val idUser = userData?.id
-
-        if (userData != null) {
+        viewModel.getDetail(userId.toString())
+        viewModel.detail.observe(this) { userData ->
             val name = splitFullName(userData.name)
             binding.etFirstName.setText(name.first)
             binding.etLastName.setText(name.second)
@@ -117,8 +112,8 @@ class EditActivity : AppCompatActivity() {
 
             if (success) {
                 val editRequestBody = EditRequestBody(firstName, lastName, gender, dateOfBirth, email, phoneNumber, address)
-                if (idUser != null) {
-                    viewModel.postEdit(idUser, editRequestBody) { isEdited ->
+                if (userId != null) {
+                    viewModel.postEdit(userId, editRequestBody) { isEdited ->
                         if (isEdited) {
                             Toast.makeText(applicationContext, "Register success", Toast.LENGTH_LONG).show()
                             goToMain()

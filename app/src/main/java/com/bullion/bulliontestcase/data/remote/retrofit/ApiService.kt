@@ -3,6 +3,7 @@ package com.bullion.bulliontestcase.data.remote.retrofit
 import android.net.Uri
 import com.bullion.bulliontestcase.data.remote.request.EditRequestBody
 import com.bullion.bulliontestcase.data.remote.request.LoginRequestBody
+import com.bullion.bulliontestcase.data.remote.response.DetailResponse
 import com.bullion.bulliontestcase.data.remote.response.EditResponse
 import com.bullion.bulliontestcase.data.remote.response.LoginResponse
 import com.bullion.bulliontestcase.data.remote.response.RegisterResponse
@@ -45,6 +46,12 @@ interface ApiService {
     fun getUsers(
         @Header("Authorization") auth: String
     ): Call<UsersResponse>
+
+    @GET("/api/v1/admin/{id}")
+    fun getDetail(
+        @Header("Authorization") auth: String,
+        @Path("id") id: String
+    ): Call<DetailResponse>
 
     @PUT("api/v1/admin/{id}/update")
     fun postEdit(

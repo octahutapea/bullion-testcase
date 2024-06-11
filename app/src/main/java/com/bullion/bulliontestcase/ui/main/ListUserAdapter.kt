@@ -39,7 +39,7 @@ class ListUserAdapter(private val context: Context) : ListAdapter<UserItem, List
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, DetailActivity::class.java)
-            intent.putExtra("userItem", user)
+            intent.putExtra("userId", user.id)
             context.startActivity(intent)
         }
     }
